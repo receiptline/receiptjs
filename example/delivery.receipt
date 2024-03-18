@@ -1,0 +1,20 @@
+`^^^~~~Delivery~~~
+
+Mar. 18, 2024 12:34 PM
+Order #: ^56
+-
+{width:10,*}
+^^^2 |^^Hamburger
+{width:12,*}
+||Tomato
+||Meat Sauce
+||Onion
+||Mayonnaise
+||Mustard
+-
+{width:10,*}
+^^^2 |^^Coffee
+{width:12,*}
+||Soy Milk
+-
+{code:20240318123456;option:qrcode,5,h}

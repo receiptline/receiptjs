@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="../lib/receipt.js"></script>
+<script type="text/javascript" src="../lib/receipt-printer.js"></script>
+<script type="text/javascript" src="../lib/qrcode-generator/qrcode.js"></script>
+<script type="text/javascript">
+
+const transaction = {
+    datetime: new Date().toLocaleString(),
+    items: [
+        { name: 'Asparagus', quantity: 1, amount: 100 },
+        { name: 'Broccoli', quantity: 2, amount: 200 },
+        { name: 'Carrot', quantity: 3, amount: 300 },
+    ],
+    total: 600
+};
+
+const template = `^^^RECEIPT
+
+${transaction.datetime}
+${transaction.items.map(item => `${item.name} | ${item.quantity}| ${item.amount}`).join('\n')}
+---
+^TOTAL | ^${transaction.total}`;
+
+function initialize() {
+    const button = document.querySelector('button');
+    const hr = document.querySelector('hr');
+    button.onclick = async () => {
+        const receipt = Receipt.from(template, '-c 42 -p generic');
+        const command = await receipt.toCommand();
+        const div = document.createElement('div');
+        div.append(command.split('').map(c => `0${c.charCodeAt(0)}`.slice(-2)).join(' '));
+        hr.after(div);
+    };
+}
+</script>
+</head>
+<body onload="initialize()">
+<button>Command</button>
+<hr>
+</body>
+</html>

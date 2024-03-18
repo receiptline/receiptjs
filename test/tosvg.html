@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="../lib/receipt.js"></script>
+<script type="text/javascript" src="../lib/qrcode-generator/qrcode.js"></script>
+<script type="text/javascript">
+
+const transaction = {
+    datetime: new Date().toLocaleString(),
+    items: [
+        { name: 'Asparagus', quantity: 1, amount: 100 },
+        { name: 'Broccoli', quantity: 2, amount: 200 },
+        { name: 'Carrot', quantity: 3, amount: 300 },
+    ],
+    total: 600
+};
+
+const template = `^^^RECEIPT
+
+${transaction.datetime}
+${transaction.items.map(item => `${item.name} | ${item.quantity}| ${item.amount}`).join('\n')}
+---
+^TOTAL | ^${transaction.total}`;
+
+function initialize() {
+    const button = document.querySelector('button');
+    const hr = document.querySelector('hr');
+    button.onclick = async () => {
+        const receipt = Receipt.from(template, '-c 42 -l en');
+        const svg = await receipt.toSVG();
+        const dom = new DOMParser().parseFromString(svg, 'image/svg+xml').documentElement;
+        hr.after(dom);
+    };
+}
+</script>
+</head>
+<body onload="initialize()">
+<button>SVG</button>
+<hr>
+</body>
+</html>
