@@ -296,7 +296,7 @@ The connection.status instance property is a string representing the printer sta
   - `offline`: printer is off or offline
   - `disconnect`: printer is not connected
 
-## connection.print(markdown[, parameters])
+## connection.print(markdown[, options])
 
 The print() instance method prints a receipt markdown text.  
 
@@ -385,6 +385,13 @@ The on() instance method adds the `listener` function to the listeners array for
 
 - `name`
   - event name
+    - `online`: printer is online
+    - `print`: printer is printing
+    - `coveropen`: printer cover is open
+    - `paperempty`: no receipt paper
+    - `error`: printer error (except cover open and paper empty)
+    - `offline`: printer is off or offline
+    - `disconnect`: printer is not connected
 - `listener`
   - the listener function
 
@@ -400,12 +407,27 @@ The off() instance method removes the `listener` function from the listeners arr
 
 - `name`
   - event name
+    - `online`: printer is online
+    - `print`: printer is printing
+    - `coveropen`: printer cover is open
+    - `paperempty`: no receipt paper
+    - `error`: printer error (except cover open and paper empty)
+    - `offline`: printer is off or offline
+    - `disconnect`: printer is not connected
 - `listener`
   - the listener function
 
 ### Return value
 
 - None.
+
+
+# Web browsers
+
+- Modern Web browsers
+
+The print function is available on Chrome, Edge, and Opera for PCs that support the Web Serial API.  
+(Windows, Linux, Mac, and ChromeOS)  
 
 
 # Receipt Printers
@@ -417,20 +439,20 @@ The off() instance method removes the `listener` function from the listeners arr
 - Fujitsu FP series
 
 Connect with the Web Serial API.  
-(Bluetooth SPP, Virtual serial port driver, Serial port, ...)  
+(Bluetooth, virtual serial port, and serial port)  
 
 Epson TM series (South Asia model) and Star MC series (StarPRNT model) can print with device font of Thai characters.  
 
 ## Restrictions
 
-### Connecting a USB printer with an Epson TM virtual port  
+### When connecting a USB printer with Epson TM Virtual Port on Windows
 
-When closing the port to which no printer is connected, the browser may stop responding.  
+Closing the virtual port to which no printer is connected may cause the browser to stop responding.  
 Please change the signal line setting to "RS-232C cross cable".  
 
 ![tmvpd](resource/tmvpd.png)  
 
-If the printer goes offline during print data transmission and the port is closed, the browser may stop responding.  
+If the printer goes offline during print data transmission and the virtual port is closed, the browser may stop responding.  
 In this case, press the printer's paper feed button.  
 
 
