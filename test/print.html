@@ -1,41 +1,26 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
-<title>Test</title>
+<title>print()</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="../lib/receipt.js"></script>
 <script type="text/javascript" src="../lib/receipt-printer.js"></script>
-<script type="text/javascript" src="../lib/receipt-serial.js"></script>
+<!--<script type="text/javascript" src="../lib/receipt-serial.js"></script>-->
+<script type="text/javascript" src="./receipt-serial-console.js"></script>
 <script type="text/javascript" src="../lib/qrcode-generator/qrcode.js"></script>
 <script type="text/javascript">
 
-const transaction = {
-    datetime: new Date().toLocaleString(),
-    items: [
-        { name: 'Asparagus', quantity: 1, amount: 100 },
-        { name: 'Broccoli', quantity: 2, amount: 200 },
-        { name: 'Carrot', quantity: 3, amount: 300 },
-    ],
-    total: 600
-};
-
-const template = `^^^RECEIPT
-
-${transaction.datetime}
-${transaction.items.map(item => `${item.name} | ${item.quantity}| ${item.amount}`).join('\n')}
----
-^TOTAL | ^${transaction.total}`;
-
 function initialize() {
+    const markdown = document.querySelector('#markdown');
     const open = document.querySelector('#open');
     const print = document.querySelector('#print');
     const close = document.querySelector('#close');
-    const hr = document.querySelector('hr');
+    const body = document.querySelector('body');
     const log = msg => {
         const div = document.createElement('div');
         div.append(`${new Date().toISOString()} ${msg}`);
-        hr.after(div);
+        body.append(div);
     };
     let conn = null;
     open.onclick = async () => {
@@ -47,23 +32,34 @@ function initialize() {
             conn.on('ready', () => {
                 log('ready');
             });
+            conn.on('disconnect', () => {
+                conn = null;
+            });
         }
     };
     print.onclick = async () => {
         if (conn) {
-            log(await conn.print(template, '-c 42'));
+            log(await conn.print(markdown.value, '-c 42'));
         }
     };
     close.onclick = () => {
         if (conn) {
             conn.close();
-            conn = null;
         }
     };
 }
 </script>
 </head>
 <body onload="initialize()">
+<textarea rows="20" cols="80" id="markdown" title="markdown">^^^RECEIPT
+
+03/18/2024, 12:34:56 PM
+Asparagus | 1| 1.00
+Broccoli  | 2| 2.00
+Carrot    | 3| 3.00
+---
+^TOTAL | ^6.00</textarea>
+<br>
 <button id="open">Open</button>
 <button id="print">Print</button>
 <button id="close">Close</button>

@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
-<title>Test</title>
+<title>toCommand()</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="../lib/receipt.js"></script>
 <script type="text/javascript" src="../lib/receipt-printer.js"></script>
@@ -28,13 +28,13 @@ ${transaction.items.map(item => `${item.name} | ${item.quantity}| ${item.amount}
 
 function initialize() {
     const button = document.querySelector('button');
-    const hr = document.querySelector('hr');
+    const body = document.querySelector('body');
     button.onclick = async () => {
         const receipt = Receipt.from(template, '-c 42 -p generic');
         const command = await receipt.toCommand();
         const div = document.createElement('div');
-        div.append(command.split('').map(c => `0${c.charCodeAt(0)}`.slice(-2)).join(' '));
-        hr.after(div);
+        div.append(command.split('').map(c => `0${c.charCodeAt(0).toString(16)}`.slice(-2)).join(' '));
+        body.append(div);
     };
 }
 </script>
