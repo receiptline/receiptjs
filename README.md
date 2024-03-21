@@ -84,6 +84,7 @@ The Receipt.from() static method creates a new Receipt instance.
 ## receipt.toPNG()
 
 The toPNG() instance method converts to PNG.  
+https://receiptline.github.io/receiptjs/test/topng.html  
 
 ### Parameters
 
@@ -96,6 +97,7 @@ The toPNG() instance method converts to PNG.
 ## receipt.toSVG()
 
 The toSVG() instance method converts to SVG.  
+https://receiptline.github.io/receiptjs/test/tosvg.html  
 
 ### Parameters
 
@@ -108,6 +110,7 @@ The toSVG() instance method converts to SVG.
 ## receipt.toText()
 
 The toText() instance method converts to plain text.  
+https://receiptline.github.io/receiptjs/test/totext.html  
 
 ### Parameters
 
@@ -221,6 +224,7 @@ The Receipt.from() static method creates a new Receipt instance.
 ## receipt.toCommand()
 
 The toCommand() instance method converts to printer commands.  
+https://receiptline.github.io/receiptjs/test/tocommand.html  
 
 ### Parameters
 
@@ -281,6 +285,8 @@ The ReceiptSerial.connect() static method creates a new connection using the Web
     - stop bits: `1`
     - flow control: `hardware`
 
+These options are for real serial ports.  
+
 ## connection.status
 
 The connection.status instance property is a string representing the printer status.  
@@ -299,6 +305,7 @@ The connection.status instance property is a string representing the printer sta
 ## connection.print(markdown[, options])
 
 The print() instance method prints a receipt markdown text.  
+https://receiptline.github.io/receiptjs/test/print.html  
 
 ### Parameters
 
@@ -385,6 +392,8 @@ The on() instance method adds the `listener` function to the listeners array for
 
 - `name`
   - event name
+    - `status`: printer status updated
+    - `ready`: ready to print
     - `online`: printer is online
     - `print`: printer is printing
     - `coveropen`: printer cover is open
@@ -407,6 +416,8 @@ The off() instance method removes the `listener` function from the listeners arr
 
 - `name`
   - event name
+    - `status`: printer status updated
+    - `ready`: ready to print
     - `online`: printer is online
     - `print`: printer is printing
     - `coveropen`: printer cover is open

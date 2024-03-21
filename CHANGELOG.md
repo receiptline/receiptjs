@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.2] - 2024-03-21
+### Fixed
+- README
+
 ## [1.0.1] - 2024-03-20
 ### Fixed
 - README
