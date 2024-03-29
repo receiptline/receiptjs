@@ -77,7 +77,7 @@ The Receipt.from() static method creates a new Receipt instance.
     - default: system locale
   - `-s`: paper saving (reduce line spacing)
 
-### Return value  
+### Return value
 
   - A new Receipt instance.
 
@@ -165,7 +165,7 @@ const command = await receipt.toCommand();
 
 The Receipt.from() static method creates a new Receipt instance.  
 
-### Parameters  
+### Parameters
 
 - `markdown` &lt;string&gt;
   - receipt markdown text
@@ -217,7 +217,7 @@ The Receipt.from() static method creates a new Receipt instance.
     - values: `180`, `203`
     - default: `203`
 
-### Return value  
+### Return value
 
   - A new Receipt instance.
 
@@ -274,7 +274,7 @@ conn.on('ready', async () => {
 
 The ReceiptSerial.connect() static method creates a new connection using the Web Serial API.  
 
-### Parameters  
+### Parameters
 
 - `options` &lt;object&gt;
   - `baudRate`: baud rate to establish serial communication
@@ -287,9 +287,13 @@ The ReceiptSerial.connect() static method creates a new connection using the Web
 
 These options are for real serial ports.  
 
-## connection.status
+### Return value
 
-The connection.status instance property is a string representing the printer status.  
+  - A new ReceiptSerial instance.
+
+## receiptSerial.status
+
+The receiptSerial.status instance property is a string representing the printer status.  
 
 ### Value
 
@@ -302,7 +306,7 @@ The connection.status instance property is a string representing the printer sta
   - `offline`: printer is off or offline
   - `disconnect`: printer is not connected
 
-## connection.print(markdown[, options])
+## receiptSerial.print(markdown[, options])
 
 The print() instance method prints a receipt markdown text.  
 https://receiptline.github.io/receiptjs/test/print.html  
@@ -371,7 +375,7 @@ https://receiptline.github.io/receiptjs/test/print.html
   - `offline`: printer is off or offline
   - `disconnect`: printer is not connected
 
-## connection.close()
+## receiptSerial.close()
 
 The close() instance method closes the connection.  
 The current implementation also closes other open connections.  
@@ -384,7 +388,7 @@ The current implementation also closes other open connections.
 
 - None.
 
-## connection.on(name, listener)
+## receiptSerial.on(name, listener)
 
 The on() instance method adds the `listener` function to the listeners array for the event named `name`.  
 
@@ -408,7 +412,7 @@ The on() instance method adds the `listener` function to the listeners array for
 
 - None.
 
-## connection.off(name, listener)
+## receiptSerial.off(name, listener)
 
 The off() instance method removes the `listener` function from the listeners array for the event named `name`.  
 
@@ -441,7 +445,7 @@ The print function is available on Chrome, Edge, and Opera for PCs that support 
 (Windows, Linux, Mac, and ChromeOS)  
 
 
-# Receipt Printers
+# Receipt printers
 
 - Epson TM series
 - Seiko Instruments RP series

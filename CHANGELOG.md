@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2024-03-29
+### Fixed
+- README
+- Status checks in StarPRNT mode
+
 ## [1.0.2] - 2024-03-21
 ### Fixed
 - README
