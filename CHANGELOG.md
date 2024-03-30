@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4] - 2024-03-30
+### Fixed
+- Shift_JIS table
+
 ## [1.0.3] - 2024-03-29
 ### Fixed
 - README
