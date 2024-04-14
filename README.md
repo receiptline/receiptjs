@@ -442,7 +442,7 @@ The off() instance method removes the `listener` function from the listeners arr
 - Modern Web browsers
 
 The print function is available on Chrome, Edge, and Opera for PCs that support the Web Serial API.  
-(Windows, Linux, Mac, and ChromeOS)  
+(Windows, Linux, macOS, and ChromeOS)  
 
 
 # Receipt printers
