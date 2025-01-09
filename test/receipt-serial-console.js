@@ -251,34 +251,36 @@ const ReceiptSerial = (() => {
                             }
                             else if ((buffer[0] & 0x91) === 0x01) {
                                 // star: automatic status
-                                const l = ((buffer[0] >> 2 & 0x18) | (buffer[0] >> 1 & 0x07)) + (buffer[1] >> 6 & 0x02);
-                                // check length
-                                if (l <= buffer.length) {
-                                    console.log(new Date().toISOString(), 'star: automatic status');
-                                    if ((buffer[2] & 0x20) === 0x20) {
-                                        // cover open event
-                                        update(state.coveropen);
+                                if (len > 1) {
+                                    const l = ((buffer[0] >> 2 & 0x18) | (buffer[0] >> 1 & 0x07)) + (buffer[1] >> 6 & 0x02);
+                                    // check length
+                                    if (l <= len) {
+                                        console.log(new Date().toISOString(), 'star: automatic status');
+                                        if ((buffer[2] & 0x20) === 0x20) {
+                                            // cover open event
+                                            update(state.coveropen);
+                                        }
+                                        else if ((buffer[5] & 0x08) === 0x08) {
+                                            // paper empty event
+                                            update(state.paperempty);
+                                        }
+                                        else if ((buffer[3] & 0x2c) !== 0 || (buffer[4] & 0x0a) !== 0) {
+                                            // error event
+                                            update(state.error);
+                                        }
+                                        else {
+                                            // nothing to do
+                                        }
+                                        // clear data
+                                        buffer.splice(0, l);
+                                        // clear timer
+                                        clearTimeout(timeout);
+                                        // printer control language
+                                        printer = 'star';
+                                        console.log(new Date().toISOString(), `printer: ${printer}`);
+                                        // enable automatic status
+                                        drain = conn.write(command.starasb, 'binary');
                                     }
-                                    else if ((buffer[5] & 0x08) === 0x08) {
-                                        // paper empty event
-                                        update(state.paperempty);
-                                    }
-                                    else if ((buffer[3] & 0x2c) !== 0 || (buffer[4] & 0x0a) !== 0) {
-                                        // error event
-                                        update(state.error);
-                                    }
-                                    else {
-                                        // nothing to do
-                                    }
-                                    // clear data
-                                    buffer.splice(0, l);
-                                    // clear timer
-                                    clearTimeout(timeout);
-                                    // printer control language
-                                    printer = 'star';
-                                    console.log(new Date().toISOString(), `printer: ${printer}`);
-                                    // enable automatic status
-                                    drain = conn.write(command.starasb, 'binary');
                                 }
                             }
                             else if ((buffer[0] & 0x93) === 0x12) {
@@ -319,7 +321,7 @@ const ReceiptSerial = (() => {
                             }
                             else if ((buffer[0] & 0x93) === 0x10) {
                                 // escpos: automatic status
-                                if (buffer.length > 3 && (buffer[1] & 0x90) === 0 && (buffer[2] & 0x90) === 0 && (buffer[3] & 0x90) === 0) {
+                                if (len > 3 && (buffer[1] & 0x90) === 0 && (buffer[2] & 0x90) === 0 && (buffer[3] & 0x90) === 0) {
                                     console.log(new Date().toISOString(), 'escpos: automatic status');
                                     // clear data
                                     buffer.splice(0, 4);
@@ -363,7 +365,7 @@ const ReceiptSerial = (() => {
                             else if ((buffer[0] & 0xf0) === 0xc0) {
                                 // sii: automatic status
                                 console.log(new Date().toISOString(), 'sii: automatic status');
-                                if (buffer.length > 7) {
+                                if (len > 7) {
                                     if ((buffer[1] & 0xf8) === 0xd8) {
                                         // cover open event
                                         update(state.coveropen);
@@ -397,35 +399,37 @@ const ReceiptSerial = (() => {
                         case 'star':
                             if ((buffer[0] & 0xf1) === 0x21) {
                                 // star: automatic status
-                                const l = ((buffer[0] >> 2 & 0x08) | (buffer[0] >> 1 & 0x07)) + (buffer[1] >> 6 & 0x02);
-                                // check length
-                                if (l <= buffer.length) {
-                                    console.log(new Date().toISOString(), 'star: automatic status');
-                                    if ((buffer[2] & 0x20) === 0x20) {
-                                        // cover open event
-                                        update(state.coveropen);
+                                if (len > 1) {
+                                    const l = ((buffer[0] >> 2 & 0x08) | (buffer[0] >> 1 & 0x07)) + (buffer[1] >> 6 & 0x02);
+                                    // check length
+                                    if (l <= len) {
+                                        console.log(new Date().toISOString(), 'star: automatic status');
+                                        if ((buffer[2] & 0x20) === 0x20) {
+                                            // cover open event
+                                            update(state.coveropen);
+                                        }
+                                        else if ((buffer[5] & 0x08) === 0x08) {
+                                            // paper empty event
+                                            update(state.paperempty);
+                                        }
+                                        else if ((buffer[3] & 0x2c) !== 0 || (buffer[4] & 0x0a) !== 0) {
+                                            // error event
+                                            update(state.error);
+                                        }
+                                        else if (status !== state.print) {
+                                            // online event
+                                            update(state.online);
+                                        }
+                                        else if (drain) {
+                                            // online event
+                                            update(state.online);
+                                        }
+                                        else {
+                                            // nothing to do
+                                        }
+                                        // clear data
+                                        buffer.splice(0, l);
                                     }
-                                    else if ((buffer[5] & 0x08) === 0x08) {
-                                        // paper empty event
-                                        update(state.paperempty);
-                                    }
-                                    else if ((buffer[3] & 0x2c) !== 0 || (buffer[4] & 0x0a) !== 0) {
-                                        // error event
-                                        update(state.error);
-                                    }
-                                    else if (status !== state.print) {
-                                        // online event
-                                        update(state.online);
-                                    }
-                                    else if (drain) {
-                                        // online event
-                                        update(state.online);
-                                    }
-                                    else {
-                                        // nothing to do
-                                    }
-                                    // clear data
-                                    buffer.splice(0, l);
                                 }
                             }
                             else {
@@ -449,7 +453,7 @@ const ReceiptSerial = (() => {
                             }
                             else if ((buffer[0] & 0x93) === 0x10) {
                                 // escpos: automatic status
-                                if (buffer.length > 3 && (buffer[1] & 0x90) === 0 && (buffer[2] & 0x90) === 0 && (buffer[3] & 0x90) === 0) {
+                                if (len > 3 && (buffer[1] & 0x90) === 0 && (buffer[2] & 0x90) === 0 && (buffer[3] & 0x90) === 0) {
                                     console.log(new Date().toISOString(), 'escpos: automatic status');
                                     if ((buffer[0] & 0x20) === 0x20) {
                                         // cover open event
