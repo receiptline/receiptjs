@@ -375,6 +375,31 @@ https://receiptline.github.io/receiptjs/test/print.html
   - `offline`: printer is off or offline
   - `disconnect`: printer is not connected
 
+## receiptSerial.drawer
+
+The receiptSerial.drawer instance property is a string representing the cash drawer status.  
+
+### Value
+
+- A string representing the cash drawer status.
+  - `drawerclosed`: drawer is closed
+  - `draweropen`: drawer is open
+  - `offline`: printer is off or offline
+  - `disconnect`: printer is not connected
+
+## receiptSerial.invertDrawerState(invert)
+
+The invertDrawerState() instance method inverts cash drawer state.  
+
+### Parameters
+
+- `invert` &lt;boolean&gt;
+  - if true, invert drawer state
+
+### Return value
+
+- None.
+
 ## receiptSerial.close()
 
 The close() instance method closes the connection.  
@@ -405,6 +430,9 @@ The on() instance method adds the `listener` function to the listeners array for
     - `error`: printer error (except cover open and paper empty)
     - `offline`: printer is off or offline
     - `disconnect`: printer is not connected
+    - `drawer`: drawer status updated
+    - `drawerclosed`: drawer is closed
+    - `draweropen`: drawer is open
 - `listener`
   - the listener function
 
@@ -429,6 +457,9 @@ The off() instance method removes the `listener` function from the listeners arr
     - `error`: printer error (except cover open and paper empty)
     - `offline`: printer is off or offline
     - `disconnect`: printer is not connected
+    - `drawer`: drawer status updated
+    - `drawerclosed`: drawer is closed
+    - `draweropen`: drawer is open
 - `listener`
   - the listener function
 

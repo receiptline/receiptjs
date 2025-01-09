@@ -126,7 +126,9 @@ const ReceiptSerial = (() => {
         paperempty: 'paperempty',
         error: 'error',
         offline: 'offline',
-        disconnect: 'disconnect'
+        disconnect: 'disconnect',
+        drawerclosed: 'drawerclosed',
+        draweropen: 'draweropen'
     };
 
     // control commands
@@ -135,7 +137,7 @@ const ReceiptSerial = (() => {
         clear: '\x10\x14\x08\x01\x03\x14\x01\x06\x02\x08', // DLE DC4 n d1 d2 d3 d4 d5 d6 d7
         siiasb: '\x1da\xff', // GS a n
         starasb: '\x1b\x1ea\x01\x17', // ESC RS a n ETB
-        escasb: '\x1dI\x42\x1dI\x43\x1da\xff' // GS I n GS I n GS a n
+        escasb: '\x10\x04\x01\x1dI\x42\x1dI\x43\x1da\xff' // DLE EOT n GS I n GS I n GS a n
     };
 
     return {
@@ -155,7 +157,10 @@ const ReceiptSerial = (() => {
                 paperempty: [],
                 error: [],
                 offline: [],
-                disconnect: []
+                disconnect: [],
+                drawer: [],
+                drawerclosed: [],
+                draweropen: []
             };
             // promise resolver
             let resolve = () => {};
@@ -183,6 +188,34 @@ const ReceiptSerial = (() => {
                     }
                 }
                 console.log(new Date().toISOString(), 'status:', status);
+            };
+            // drawer status
+            let drawer = state.offline;
+            // invert drawer status
+            let invertion = false;
+            // update drawer status
+            const updateDrawer = newstatus => {
+                let d = newstatus;
+                // invert drawer status
+                if (invertion) {
+                    switch (d) {
+                        case state.drawerclosed:
+                            d = state.draweropen;
+                            break;
+                        case state.draweropen:
+                            d = state.drawerclosed;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (d !== drawer) {
+                    // status event
+                    drawer = d;
+                    dispatch(listeners.drawer, drawer);
+                    dispatch(listeners[drawer]);
+                }
+                console.log(new Date().toISOString(), 'status:', drawer);
             };
             // timer
             let timeout = 0;
@@ -225,6 +258,7 @@ const ReceiptSerial = (() => {
             conn.on('close', () => {
                 // disconnect event
                 update(state.disconnect);
+                updateDrawer(state.disconnect);
             });
             // data event
             conn.on('data', data => {
@@ -256,6 +290,7 @@ const ReceiptSerial = (() => {
                                     // check length
                                     if (l <= len) {
                                         console.log(new Date().toISOString(), 'star: automatic status');
+                                        // printer
                                         if ((buffer[2] & 0x20) === 0x20) {
                                             // cover open event
                                             update(state.coveropen);
@@ -271,6 +306,8 @@ const ReceiptSerial = (() => {
                                         else {
                                             // nothing to do
                                         }
+                                        // cash drawer
+                                        updateDrawer((buffer[2] & 0x04) === 0x04 ? state.draweropen : state.drawerclosed);
                                         // clear data
                                         buffer.splice(0, l);
                                         // clear timer
@@ -366,6 +403,7 @@ const ReceiptSerial = (() => {
                                 // sii: automatic status
                                 console.log(new Date().toISOString(), 'sii: automatic status');
                                 if (len > 7) {
+                                    // printer
                                     if ((buffer[1] & 0xf8) === 0xd8) {
                                         // cover open event
                                         update(state.coveropen);
@@ -385,6 +423,8 @@ const ReceiptSerial = (() => {
                                     else {
                                         // nothing to do
                                     }
+                                    // cash drawer
+                                    updateDrawer((buffer[3] & 0xf8) === 0xd8 ? state.drawerclosed : state.draweropen);
                                     // clear data
                                     buffer.splice(0, 8);
                                 }
@@ -404,6 +444,7 @@ const ReceiptSerial = (() => {
                                     // check length
                                     if (l <= len) {
                                         console.log(new Date().toISOString(), 'star: automatic status');
+                                        // printer
                                         if ((buffer[2] & 0x20) === 0x20) {
                                             // cover open event
                                             update(state.coveropen);
@@ -427,6 +468,8 @@ const ReceiptSerial = (() => {
                                         else {
                                             // nothing to do
                                         }
+                                        // cash drawer
+                                        updateDrawer((buffer[2] & 0x04) === 0x04 ? state.draweropen : state.drawerclosed);
                                         // clear data
                                         buffer.splice(0, l);
                                     }
@@ -455,6 +498,7 @@ const ReceiptSerial = (() => {
                                 // escpos: automatic status
                                 if (len > 3 && (buffer[1] & 0x90) === 0 && (buffer[2] & 0x90) === 0 && (buffer[3] & 0x90) === 0) {
                                     console.log(new Date().toISOString(), 'escpos: automatic status');
+                                    // printer
                                     if ((buffer[0] & 0x20) === 0x20) {
                                         // cover open event
                                         update(state.coveropen);
@@ -474,6 +518,8 @@ const ReceiptSerial = (() => {
                                     else {
                                         // nothing to do
                                     }
+                                    // cash drawer
+                                    updateDrawer((buffer[0] & 0x04) === 0x04 ? state.drawerclosed : state.draweropen);
                                     // clear data
                                     buffer.splice(0, 4);
                                 }
@@ -518,11 +564,21 @@ const ReceiptSerial = (() => {
                                         }
                                         // offline event
                                         update(state.offline);
+                                        updateDrawer(state.offline);
                                     }
                                     else {
                                         // nothing to do
                                     }
                                 }
+                            }
+                            else if ((buffer[0] & 0x93) === 0x12) {
+                                // escpos: realtime status
+                                // clear timer
+                                clearTimeout(timeout);
+                                // cash drawer
+                                updateDrawer((buffer[0] & 0x97) === 0x16 ? state.drawerclosed : state.draweropen);
+                                // clear data
+                                buffer.shift();
                             }
                             else {
                                 // escpos: other
@@ -544,6 +600,30 @@ const ReceiptSerial = (() => {
                  */
                 get status() {
                     return status;
+                },
+                /**
+                 * Cash drawer status.
+                 * @type {string} cash drawer status
+                 */
+                get drawer() {
+                    return drawer;
+                },
+                /**
+                 * Invert cash drawer state.
+                 * @param {boolean} invert invert cash drawer state
+                 */
+                invertDrawerState(invert) {
+                    invertion = !!invert;
+                    switch (drawer) {
+                        case state.drawerclosed:
+                            drawer = state.draweropen;
+                            break;
+                        case state.draweropen:
+                            drawer = state.drawerclosed;
+                            break;
+                        default:
+                            break;
+                    }
                 },
                 /**
                  * Print receipt markdown.

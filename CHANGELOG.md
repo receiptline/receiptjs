@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0] - 2025-01-10
+### Added
+- Cash drawer status
+
+### Fixed
+- Buffer length check
+
 ## [1.0.5] - 2024-04-14
 ### Fixed
 - README

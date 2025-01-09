@@ -16,6 +16,7 @@ function initialize() {
     const open = document.querySelector('#open');
     const print = document.querySelector('#print');
     const close = document.querySelector('#close');
+    const invert = document.querySelector('#invert');
     const body = document.querySelector('body');
     const log = msg => {
         const div = document.createElement('div');
@@ -26,6 +27,9 @@ function initialize() {
     open.onclick = async () => {
         if (!conn) {
             conn = ReceiptSerial.connect();
+            conn.on('drawer', status => {
+                log(status);
+            });
             conn.on('status', status => {
                 log(status);
             });
@@ -35,6 +39,7 @@ function initialize() {
             conn.on('disconnect', () => {
                 conn = null;
             });
+            conn.invertDrawerState(invert.checked);
         }
     };
     print.onclick = async () => {
@@ -45,6 +50,11 @@ function initialize() {
     close.onclick = () => {
         if (conn) {
             conn.close();
+        }
+    };
+    invert.onchange = () => {
+        if (conn) {
+            conn.invertDrawerState(invert.checked);
         }
     };
 }
@@ -63,6 +73,8 @@ Carrot    | 3| 3.00
 <button id="open">Open</button>
 <button id="print">Print</button>
 <button id="close">Close</button>
+<input id="invert" type="checkbox">
+<label for="invert">Invert drawer state</label>
 <hr>
 </body>
 </html>
