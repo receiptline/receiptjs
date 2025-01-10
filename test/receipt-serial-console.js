@@ -371,15 +371,7 @@ const ReceiptSerial = (() => {
                                 if (i > 0) {
                                     console.log(new Date().toISOString(), 'escpos: block data');
                                     // clear data
-                                    const block = buffer.splice(0, i + 1);
-                                    // clear response or power on
-                                    if (block[0] === 0x37 && block[1] === 0x25 || block[0] === 0x3b && block[1] === 0x31) {
-                                        console.log(new Date().toISOString(), 'escpos: clear response or power on');
-                                        // clear timer
-                                        clearTimeout(timeout);
-                                        // hello to printer
-                                        drain = conn.write(command.hello, 'binary');
-                                    }
+                                    buffer.splice(0, i + 1);
                                 }
                             }
                             else {
