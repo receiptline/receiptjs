@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.2] - 2025-10-13
+### Fixed
+- Bugs in UPC and EAN for SII Landscape
+- SVG coordinates to integer values
+- Redundant code
+
 ## [1.1.1] - 2025-01-11
 ### Fixed
 - Incorrect drawer events
