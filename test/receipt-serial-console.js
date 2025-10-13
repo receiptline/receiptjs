@@ -528,7 +528,7 @@ const ReceiptSerial = (() => {
                                         // clear timer
                                         clearTimeout(timeout);
                                         // model info
-                                        const model = block.slice(1, -1).reduce((a, c) => a + String.fromCharCode(c), '').toLowerCase();
+                                        const model = String.fromCharCode(...block.slice(1, -1)).toLowerCase();
                                         console.log(new Date().toISOString(), 'escpos:', model);
                                         if (printer === 'generic' && /^(epson|citizen|fit)$/.test(model)) {
                                             // escpos thermal
