@@ -485,12 +485,6 @@ Epson TM series (South Asia model) and Star MC series (StarPRNT model) can print
 
 ## Restrictions
 
-### When connecting a USB printer with Epson TM Virtual Port on Windows
+The Web Serial API has no write timeout, so if hardware flow control is enabled, opening the printer cover during printing may cause the browser to stop responding. In this case, close the printer cover or press the paper feed button. Alternatively, change the printer's busy condition setting from "Offline or receive buffer full" to "Receive buffer full".  
 
-Closing the virtual port to which no printer is connected may cause the browser to stop responding.  
-Please change the signal line setting to "RS-232C cross cable".  
-
-![tmvpd](resource/tmvpd.png)  
-
-If the printer goes offline during print data transmission and the virtual port is closed, the browser may stop responding.  
-In this case, press the printer's paper feed button.  
+_The restriction on Epson TM Virtual Port on Windows that existed in previous versions has been resolved. There is no need to change the signal line settings._  

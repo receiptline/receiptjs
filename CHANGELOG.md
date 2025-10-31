@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.0] - 2025-10-31
+### Changed
+- Printer control sequence
+
 ## [2.1.0] - 2025-10-29
 ### Added
 - Quiet zone option to QR code generator
