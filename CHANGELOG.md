@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.0.0] - 2025-11-30
+### Changed
+- Fonts for SVG/PNG output
+- SVG filter ID to include UUID
+
 ## [3.0.1] - 2025-11-01
 ### Added
 - Android support

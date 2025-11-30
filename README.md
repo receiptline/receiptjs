@@ -1,6 +1,6 @@
 # Receipt.js
 
-Print libraries for receipt printers, simple and easy with markdown, printer status support.  
+JavaScript printing libraries for receipt printers, simple and easy with receipt markdown, printer status support.  
 
 ```javascript
 const markdown = `^^^RECEIPT
@@ -21,7 +21,7 @@ const png = await receipt.toPNG();
 
 # Features
 
-Receipt.js is simple print libraries for receipt printers that prints with easy markdown data for receipts and returns printer status. Even without a printer, it can output images.  
+Receipt.js is simple printing libraries for receipt printers that prints with easy markdown data for receipts and returns printer status. Even without a printer, it can output images.  
 
 A development tool is provided to edit, preview, and print the receipt markdown.  
 https://receiptline.github.io/receiptjs-designer/  
@@ -209,7 +209,7 @@ The Receipt.from() static method creates a new Receipt instance.
     - default: `1.0`
   - `-v`: landscape orientation
     - device font support: `escpos`, `epson`, `sii`, `citizen`, `star`
-  - `-r <dpi>`:print resolution for ESC/POS, landscape, and device font
+  - `-r <dpi>`: print resolution for ESC/POS, landscape, and device font
     - values: `180`, `203`
     - default: `203`
 
@@ -354,7 +354,7 @@ https://receiptline.github.io/receiptjs/test/print.html
     - default: auto detection (`epson`, `sii`, `citizen`, `fit`, `impactb`, `generic`, `star`)
   - `-v`: landscape orientation
     - device font support: `escpos`, `epson`, `sii`, `citizen`, `star`
-  - `-r <dpi>`:print resolution for ESC/POS, landscape, and device font
+  - `-r <dpi>`: print resolution for ESC/POS, landscape, and device font
     - values: `180`, `203`
     - default: `203`
 
@@ -484,5 +484,3 @@ Epson TM series (South Asia model) and Star MC series (StarPRNT model) can print
 ## Restrictions
 
 The Web Serial API has no write timeout, so if hardware flow control is enabled, opening the printer cover during printing may cause the browser to stop responding. In this case, close the printer cover or press the paper feed button. Alternatively, change the printer's busy condition setting from "Offline or receive buffer full" to "Receive buffer full".  
-
-_The restriction on Epson TM Virtual Port on Windows that existed in previous versions has been resolved. There is no need to change the signal line settings._  
