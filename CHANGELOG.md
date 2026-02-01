@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0] - 2026-02-01
+### Added
+- QR code / barcode generator API
+- QR code generator
+
+### Changed
+- SVG output from SVG 1.1 to SVG 2
+
+### Fixed
+- PNG output
+
 ## [4.0.0] - 2025-11-30
 ### Changed
 - Fonts for SVG/PNG output

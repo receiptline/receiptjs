@@ -462,6 +462,94 @@ The off() instance method removes the `listener` function from the listeners arr
 - None.
 
 
+# Generate barcodes and QR Codes
+
+The following files are required to use barcode/QR Code generator.  
+
+- receipt.js
+
+```html
+<script type="text/javascript" src="receipt.js"></script>
+```
+
+```javascript
+const bar = { data: '1234', type: 'code39', width: 2, quietZone: true };
+const barform = Receipt.barcode.generate(bar);
+
+const qr = { data: 'abcdefgh', level: 'm', quietZone: true };
+const qrform = Receipt.qrcode.generate(qr);
+```
+
+## Receipt.barcode.generate(symbol)
+
+The generate() static method creates a barcode.  
+https://receiptline.github.io/receiptjs/test/barcode.html  
+
+### Parameters
+
+- `symbol` &lt;object&gt;: barcode data
+  - `data` &lt;string&gt;: data to encode
+  - `type` &lt;string&gt;: barcode type
+    - `upc`: UPC-A, UPC-E (check digit can be omitted)
+    - `ean`, `jan`: EAN-13, EAN-8 (check digit can be omitted)
+    - `code39`: CODE39
+    - `itf`: Interleaved 2 of 5
+    - `codabar`, `nw7`: Codabar (NW-7)
+    - `code93`: CODE93
+    - `code128`: CODE128
+    - default: `code128`
+  - `width` &lt;number&gt;: module width
+    - range: `2`-`4`
+    - default: `2`
+  - `height` &lt;number&gt;: module height
+    - range: `24`-`240`
+    - default: `72`
+  - `hri` &lt;boolean&gt;: human readable interpretation
+    - default: `false`
+  - `quietZone` &lt;boolean&gt;: quiet zone
+    - default: `false`
+
+### Return value
+
+- &lt;object&gt;: barcode form
+  - `length` &lt;number&gt;: barcode width (sum of widths)
+  - `height` &lt;number&gt;: barcode height
+  - `widths` &lt;number[]&gt;: bar/space width (quiet zone, bar, space, ... , bar, quiet zone)
+  - `hri` &lt;boolean&gt;: human readable interpretation
+  - `text` &lt;string&gt;: human readable interpretation text
+
+## Receipt.qrcode.generate(symbol)
+
+The generate() static method creates a QR Code.  
+https://receiptline.github.io/receiptjs/test/qrcode.html  
+
+### Parameters
+
+- `symbol` &lt;object&gt;: QR Code data
+  - `data` &lt;string&gt;: data to encode
+  - `level` &lt;string&gt;: error correction level
+    - `l`: Low
+    - `m`: Middle
+    - `q`: Quartile
+    - `h`: High
+    - default: `l`
+  - `quietZone` &lt;boolean&gt;: quiet zone
+    - default: `false`
+
+### Return value
+
+- &lt;Uint8Array[]&gt;: QR Code form (matrix of dark and light modules)
+    - `0`: light
+    - `1`: dark
+
+QR Code is a registered trademark of DENSO WAVE INCORPORATED.  
+
+
+# QR Code Generator
+
+https://receiptline.github.io/receiptjs/qr/  
+
+
 # Web browsers
 
 The print function is available on Chrome, Edge, and Opera that support the Web Serial API.  
