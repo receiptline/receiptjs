@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>QR Code Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="favicon.ico" rel="icon">
+<style>
+footer {
+    color: silver;
+    font-size:xx-small;
+}
+datalist {
+    display: flex;
+    justify-content: space-between;
+    width: 16rem;
+}
+option {
+    padding: 0;
+}
+input[type="range"] {
+    margin: 0;
+    width: 16rem;
+}
+div {
+    background-color: white;
+    border: 2rem solid silver;
+    display: inline-flex;
+    font-size: 3rem;
+}
+</style>
+<script type="text/javascript" src="../lib/receipt.js"></script>
+<script type="text/javascript">
+function initialize() {
+    const textarea = document.querySelector('textarea');
+    const level = document.querySelector('#level');
+    const size = document.querySelector('#size');
+    const button = document.querySelector('button');
+    const format = document.querySelectorAll('input[name="format"]');
+    const div = document.querySelector('div');
+    const generate = async (download) => {
+        const qr = {
+            data: textarea.value,
+            level: 'lmqh'.charAt(level.value),
+            quietZone: true
+        };
+        const qrform = Receipt.qrcode.generate(qr);
+        const m = qrform.length;
+        const s = Number(size.value);
+        const p = m * s;
+        if (p === 0) {
+            div.replaceChildren('\u{1f4ad}');
+            button.disabled = true;
+            return;
+        }
+        button.disabled = false;
+        const f = document.querySelector('input[name="format"]:checked').value;
+        let xml = `<svg width="${p}" height="${p}" viewBox="0 0 ${p} ${p}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg"><path d="`;
+        for (let y = 0; y < m; y++) {
+            for (let x = 0; x < m; x++) {
+                if (qrform[y][x] == 1) {
+                    xml += `M${x * s},${y * s}l${s},0 0,${s} -${s},0 0,-${s}z`;
+                }
+            }
+        }
+        xml += '"/></svg>';
+        const svg = new Image();
+        svg.src = `data:image/svg+xml,${encodeURIComponent(xml)}`;
+        await svg.decode();
+        if (f === 'svg') {
+            div.replaceChildren(svg);
+            if (download) {
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(new Blob([ xml ], { type: 'image/svg+xml' }));
+                a.download = 'download.svg';
+                a.click();
+            }
+            return;
+        }
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = p;
+        canvas.height = p;
+        if (f === 'jpg') {
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, p, p);
+            context.fillStyle = 'black';
+            context.drawImage(svg, 0, 0);
+            const jpg = new Image();
+            jpg.src = canvas.toDataURL('image/jpeg');
+            await jpg.decode();
+            div.replaceChildren(jpg);
+            if (download) {
+                const bin = Uint8Array.from(atob(jpg.src.replace(/^data:image\/jpeg;base64,/, '')), c => c.charCodeAt(0));
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(new Blob([ bin ], { type: 'image/jpeg' }));
+                a.download = 'download.jpg';
+                a.click();
+            }
+        }
+        else {
+            context.fillStyle = 'black';
+            context.drawImage(svg, 0, 0);
+            const png = new Image();
+            png.src = canvas.toDataURL('image/png');
+            await png.decode();
+            div.replaceChildren(png);
+            if (download) {
+                const bin = Uint8Array.from(atob(png.src.replace(/^data:image\/png;base64,/, '')), c => c.charCodeAt(0));
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(new Blob([ bin ], { type: 'image/png' }));
+                a.download = 'download.png';
+                a.click();
+            }
+        }
+    };
+    textarea.oninput = () => generate(false);
+    level.onchange = () => generate(false);
+    size.onchange = () => generate(false);
+    format.forEach(radio => radio.onclick = () => generate(false));
+    button.onclick = () => generate(true);
+    generate(false);
+}
+</script>
+</head>
+    <body onload="initialize()">
+    <header>
+        <h1>QR Code Generator</h1>
+    </header>
+    <main>
+        <textarea rows="5" cols="40" name="data" placeholder="https://..." >QR</textarea>
+        <br>
+        <h2>&#x1f6e1;&#xfe0f;</h2>
+        <input type="range" id="level" value="2" min="0" max="3" step="1" list="levellist">
+        <datalist id="levellist">
+            <option value="0">L</option>
+            <option value="1">M</option>
+            <option value="2">Q</option>
+            <option value="3">H</option>
+        </datalist>
+        <h2>&#x1f4d0;</h2>
+        <input type="range" id="size" value="5" min="3" max="9" step="1" list="sizelist">
+        <datalist id="sizelist">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </datalist>
+        <h2>&#x1f4dc;</h2>
+        <input type="radio" id="svg" name="format" value="svg" checked>
+        <label for="svg">SVG</label>
+        <input type="radio" id="png" name="format" value="png">
+        <label for="png">PNG</label>
+        <input type="radio" id="jpg" name="format" value="jpg">
+        <label for="jpg">JPG</label>
+        &nbsp;
+        <button>Download</button>
+        <h2>&#x1f423;</h2>
+        <div></div>
+    </main>
+    <footer>Powered by Receipt.js. QR Code is a registered trademark of DENSO WAVE INCORPORATED.</footer>
+</body>
+</html>
