@@ -128,7 +128,7 @@ function initialize() {
         <h1>QR Code Generator</h1>
     </header>
     <main>
-        <textarea rows="5" cols="40" name="data" placeholder="https://..." >QR</textarea>
+        <textarea rows="5" cols="40" name="data" placeholder="https://..." ></textarea>
         <br>
         <h2>&#x1f6e1;&#xfe0f;</h2>
         <input type="range" id="level" value="2" min="0" max="3" step="1" list="levellist">
@@ -161,6 +161,11 @@ function initialize() {
         <h2>&#x1f423;</h2>
         <div></div>
     </main>
-    <footer>Powered by Receipt.js. QR Code is a registered trademark of DENSO WAVE INCORPORATED.</footer>
+    <footer>
+        <p>
+            Powered by <a href="https://github.com/receiptline/receiptjs">Receipt.js</a>.
+            QR Code is a registered trademark of DENSO WAVE INCORPORATED.
+        </p>
+    </footer>
 </body>
 </html>
