@@ -26,7 +26,6 @@ div {
     background-color: white;
     border: 2rem solid silver;
     display: inline-flex;
-    font-size: 3rem;
 }
 </style>
 <script type="text/javascript" src="../lib/receipt.js"></script>
@@ -50,6 +49,7 @@ function initialize() {
         const p = m * s;
         if (p === 0) {
             div.replaceChildren('\u{1f95a}');
+            div.style.fontSize = `${s}rem`;
             button.disabled = true;
             return;
         }
@@ -123,7 +123,7 @@ function initialize() {
 }
 </script>
 </head>
-    <body onload="initialize()">
+<body onload="initialize()">
     <header>
         <h1>QR Code Generator</h1>
     </header>
