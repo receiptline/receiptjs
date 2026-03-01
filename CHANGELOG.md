@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.1] - 2026-03-01
+### Fixed
+- PNG output
+
 ## [5.0.0] - 2026-02-01
 ### Added
 - QR code / barcode generator API
