@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.0.4] - 2026-07-28
+### Changed
+- Page load event
+- Project name
+
 ## [5.0.3] - 2026-06-24
 ### Changed
 - Icons, favicons, and logos
