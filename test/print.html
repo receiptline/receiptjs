@@ -10,7 +10,7 @@
 <script type="text/javascript" src="./receipt-serial-console.js"></script>
 <script type="text/javascript">
 
-function initialize() {
+window.addEventListener('load', event => {
     const markdown = document.querySelector('#markdown');
     const open = document.querySelector('#open');
     const print = document.querySelector('#print');
@@ -56,10 +56,10 @@ function initialize() {
             conn.invertDrawerState(invert.checked);
         }
     };
-}
+});
 </script>
 </head>
-<body onload="initialize()">
+<body>
 <textarea rows="20" cols="80" id="markdown" title="markdown">^^^RECEIPT
 
 03/18/2024, 12:34:56 PM

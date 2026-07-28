@@ -25,7 +25,7 @@ ${transaction.items.map(item => `${item.name} | ${item.quantity}| ${item.amount}
 ---
 ^TOTAL | ^${transaction.total}`;
 
-function initialize() {
+window.addEventListener('load', event => {
     const button = document.querySelector('button');
     const body = document.querySelector('body');
     button.onclick = async () => {
@@ -35,10 +35,10 @@ function initialize() {
         div.append(command.split('').map(c => `0${c.charCodeAt(0).toString(16)}`.slice(-2)).join(' '));
         body.append(div);
     };
-}
+});
 </script>
 </head>
-<body onload="initialize()">
+<body>
 <button>Command</button>
 <hr>
 </body>

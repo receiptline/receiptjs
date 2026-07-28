@@ -7,7 +7,7 @@
 <script type="text/javascript" src="../lib/receipt.js"></script>
 <script type="text/javascript">
 
-function initialize() {
+window.addEventListener('load', event => {
     const button = document.querySelector('button');
     const body = document.querySelector('body');
     let n = 0;
@@ -19,10 +19,10 @@ function initialize() {
         body.append(pre);
         n = (n + 1) % 10000;
     };
-}
+});
 </script>
 </head>
-<body onload="initialize()">
+<body>
 <button>Generate</button>
 <hr>
 </body>

@@ -6,9 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="favicon.ico" rel="icon">
 <style>
+header h1 {
+    margin-bottom: 0;
+}
+header p {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: gray;
+    font-size: small;
+}
 footer {
     color: silver;
-    font-size:xx-small;
+    font-size: xx-small;
 }
 datalist {
     display: flex;
@@ -30,7 +39,7 @@ div {
 </style>
 <script type="text/javascript" src="../lib/receipt.js"></script>
 <script type="text/javascript">
-function initialize() {
+window.addEventListener('load', event => {
     const textarea = document.querySelector('textarea');
     const level = document.querySelector('#level');
     const size = document.querySelector('#size');
@@ -120,12 +129,13 @@ function initialize() {
     format.forEach(radio => radio.onclick = () => generate(false));
     button.onclick = () => generate(true);
     generate(false);
-}
+});
 </script>
 </head>
-<body onload="initialize()">
+<body>
     <header>
         <h1>QR Code Generator</h1>
+        <p>100% Local. 100% Private. Privacy First. No Data Sent.</p>
     </header>
     <main>
         <textarea rows="5" cols="40" name="data" placeholder="https://..." ></textarea>
